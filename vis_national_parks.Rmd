@@ -1,0 +1,29 @@
+---
+title: "Visualizing National Parks"
+author: "Freaky Fritters"
+date: "10/21/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Our National Parks
+
+America has 61 national parks. They have grown in size and popularity over the years.
+
+```{r cars}
+library(tidyverse)
+```
+
+## These visuals can help see the change in popularity
+
+```{r import dataset, echo=FALSE}
+park_visits <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/national_parks.csv")
+state_pop <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/state_pop.csv")
+gas_price <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/gas_price.csv")
+park_locations <- read_csv("data/NationalParksLatLong.csv")
+```
+
+
