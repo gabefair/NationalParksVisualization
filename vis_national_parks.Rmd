@@ -142,6 +142,8 @@ park_locations <- read_csv("data/NationalParksLatLong.csv")
 
 
 Source: https://github.com/spren9er/tidytuesday/blob/master/tidytuesday_201938_national_park_visits.r
+Improvments seen below are discussed here: https://evancanfield.netlify.com/posts/2019-09-16-national-parks-tidytuesday/tidy-tuesday-38/
+
 ```{r}
 
 park_visits <- park_visits %>%
@@ -462,13 +464,14 @@ park_fees <- read_html(fees_page) %>%
   rename(park_name = park) %>% 
   mutate(park_name = stringi::stri_trans_general(park_name, id = "Latin-ASCII"),
          park_name = str_replace(park_name, "Hawai'i", "Hawaii"))
+```
 
-
-
+```{r}
 #udpated data
-summary_report <- here("data", "annual_summary_report.csv") %>% 
-  read_csv() %>% 
-  clean_names()
+summary_report <- read_csv(here("data/annual_summary_report.csv"))
+```
+
+```{r}
 
 plot_data <- summary_report %>% 
   filter(year == 2018) %>% 
