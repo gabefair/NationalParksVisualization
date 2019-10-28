@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Our National park_visits
 
-America has 61 national park_visits. They have grown in size and popularity over the years.
+America has 61 national parks. They have grown in size and popularity over the years.
 
 ```{r loading-libraries, message=F}
 library(devtools)
