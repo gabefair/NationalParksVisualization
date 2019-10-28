@@ -13,7 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 America has 61 national park_visits. They have grown in size and popularity over the years.
 
-```{r cars}
+```{r loading-libraries, message=F}
+library(devtools)
 library(tidyverse)
 library(gganimate)
 library(gifski)
@@ -22,25 +23,21 @@ library(here)
 library(lemon)
 library(RColorBrewer)
 library(scales)
-library(tidyverse)
 library(janitor)
 library(ggrepel)
 library(ggvoronoi)
-library(ggtext)
+# library(ggtext)
 library(rvest)
 library(fuzzyjoin)
 library(jkmisc)
 library(ragg)
+library(plotly)
 ```
 
 ## Code to clean and tidy the original data
 This is a demostration of using the `janitor` package
 
-```{r}
-
-library(tidyverse)
-library(rvest)
-
+```{r cleaning-data, include=F}
 df_raw <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/All%20National%20Parks%20Visitation%201904-2016.csv")
 
 
@@ -99,7 +96,7 @@ gas %>%
 
 We will now import the datasets as prepared and cleaned by the tidytuesday folks
 
-```{r import dataset, echo=FALSE}
+```{r import-dataset, message=FALSE}
 park_visits <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/national_parks.csv")
 state_pop <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/state_pop.csv")
 gas_price <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/gas_price.csv")
@@ -144,7 +141,7 @@ park_locations <- read_csv("data/NationalParksLatLong.csv")
 Source: https://github.com/spren9er/tidytuesday/blob/master/tidytuesday_201938_national_park_visits.r
 Improvments seen below are discussed here: https://evancanfield.netlify.com/posts/2019-09-16-national-parks-tidytuesday/tidy-tuesday-38/
 
-```{r}
+```{r most-popular-national-park-visits}
 
 park_visits <- park_visits %>%
   mutate(
@@ -271,7 +268,7 @@ anim_save('images/tidytuesday_201938_national_park_visits.gif')
 
 source: https://github.com/gkaramanis/tidytuesday/blob/master/week-38/national-parks-lines.R
 
-```{r}
+```{r year-over-year-change-in-total-visits-by-park}
 pv_ch <- park_visits %>% 
   distinct(year, unit_name, unit_type, visitors) %>% 
   filter(unit_type == "National Park" & year != "Total") %>%
@@ -322,7 +319,7 @@ pv_ch %>%
 ## Mean National Park visits by year
 source: https://github.com/gkaramanis/tidytuesday/blob/master/week-38/national-parks-mean-pct.R
 
-```{r}
+```{r percentage-of-all-time-average-number-of-visits-by-year}
 pv_ch <- park_visits %>% 
   distinct(year, unit_name, unit_type, visitors) %>% 
   filter(unit_type == "National Park" & year != "Total") %>%
@@ -342,7 +339,7 @@ ggplot(pv_ch) +
   scale_x_continuous(breaks = seq(1910, 2010, 20), expand = expand_scale(add = c(5, 1))) +
   scale_y_continuous(expand = c(0.05, 0.25)) +
   facet_wrap(vars(fct_reorder(unit_name, -n)), ncol = 3) +
-  scale_color_viridis(option = "plasma", discrete = TRUE) +
+  #scale_color_viridis(option = "plasma", discrete = TRUE) +
   labs(
     title = "National Park Visits, 1904–2016",
     subtitle = "Percentage of all-time average number of visits, by year",
@@ -383,7 +380,7 @@ ggplot(pv_ch) +
 ## National Parks visits
 Source: https://github.com/gkaramanis/tidytuesday/blob/master/week-38/national-parks.R
 
-```{r}
+```{r percentage-of-all-time-average-number-of-visits-by-year-2}
 pv_ch <- park_visits %>% 
   distinct(year, unit_name, unit_type, visitors) %>% 
   filter(unit_type == "National Park" & year != "Total") %>%
@@ -404,7 +401,7 @@ ggplot(pv_ch) +
   scale_x_continuous(breaks = seq(1910, 2010, 20), expand = expand_scale(add = c(5, 1))) +
   scale_y_continuous(expand = c(0.05, 0.25)) +
   facet_wrap(vars(fct_reorder(unit_name, -n)), ncol = 3) +
-  scale_color_viridis(option = "plasma", discrete = TRUE) +
+  scale_colour_viridis_d(option = "plasma") +
   labs(
     title = "National Park Visits, 1904–2016",
     subtitle = "Percentage of all-time average number of visits, by year",
@@ -444,7 +441,7 @@ ggplot(pv_ch) +
 ## Add park fees
 Source: https://github.com/jkaupp/tidytuesdays/blob/master/2019/week38/R/analysis.R
 
-```{r}
+```{r get-park-fees}
 # Get park fees
 fees_page <- "https://www.nps.gov/aboutus/entrance-fee-prices.htm"
 
@@ -456,8 +453,7 @@ parks <- read_html(fees_page) %>%
 park_fees <- read_html(fees_page) %>% 
   html_nodes(".table-wrapper > table") %>% 
   html_table() %>% 
-  map(~set_names(.x, c("date", "park_specific_annual_pass", "per_vehicle", "per_person", 
-                       "per_motorcycle"))) %>% 
+  map(~set_names(.x, c("date", "park_specific_annual_pass", "per_vehicle", "per_person", "per_motorcycle"))) %>% 
   map2(parks, ~mutate(.x, park = .y)) %>% 
   bind_rows() %>% 
   filter(date == "Current") %>% 
@@ -466,14 +462,16 @@ park_fees <- read_html(fees_page) %>%
          park_name = str_replace(park_name, "Hawai'i", "Hawaii"))
 ```
 
-```{r}
-#udpated data
-summary_report <- read_csv(here("data/annual_summary_report.csv"))
+### Read in updated data for annual summary for national parks
+
+```{r read-updated-data, message=F, warning=F}
+summary_report <- read_csv(here("data/annual_summary_report.csv")) %>% clean_names()
 ```
 
-```{r}
+## Plot estimated national park revenue from fees for 2018
 
-plot_data <- summary_report %>% 
+```{r estimated-national-park-revenue-from-fees-for-2018}
+park_revenue_data <- summary_report %>% 
   filter(year == 2018) %>% 
   mutate(visitors = recreation_visitors + non_recreation_visitors) %>% 
   select(year, park_name, visitors) %>% 
@@ -486,9 +484,9 @@ plot_data <- summary_report %>%
   mutate(revenue = visitors * parse_number(per_person)) %>% 
   rename(park_name = park_name.x) %>% 
   select(-park_name.y)
-  
 
-plot <- ggplot(plot_data, aes(x = fct_reorder(park_name, revenue), y = revenue)) +
+
+plot <- ggplot(park_revenue_data, aes(x = fct_reorder(park_name, revenue), y = revenue)) +
   geom_col(fill = "#5e81ac", size = 0.1) +
   coord_flip() +
   scale_y_continuous(labels = scales::dollar, expand = c(0.01,0)) +
@@ -507,4 +505,73 @@ plot <- ggplot(plot_data, aes(x = fct_reorder(park_name, revenue), y = revenue))
 ggsave(here("images", "tw_38plot.png"), plot, width = 10, height = 8, device = agg_png())
 ```
 
+## Getting location from park names via ggmap
+Using the park name, or any location name, and the Geocoding API from Google, we got the longitude and latitude for each parks locations.
+
+```{r getting-location-from-park-names-via-ggmap, message=F}
+# library(ggmap)
+# unique_locations <- summary_report %>% distinct(park_name)
+# locations_df <- mutate_geocode(unique_locations, park_name)
+# write_csv(locations_df, 'data/park_locations_from_google_api.csv')
+```
+
+## Getting data for geocoded plot
+
+```{r adding-location-data-for-plot, message=F}
+trial <- summary_report %>% 
+  mutate(visitors = recreation_visitors + non_recreation_visitors) %>% 
+  select(year, park_name, visitors)
+
+park_locations <- read_csv('data/park_locations_from_google_api.csv')
+colnames(park_locations)[colnames(park_locations)=="lon"] <- "long"
+
+plot_data <- trial %>% 
+  regex_left_join(park_locations, ., ignore_case = TRUE)
+
+plot_data <- plot_data %>% filter(long > -128, lat < 51, lat > 24)
+plot_data <- plot_data[complete.cases(plot_data), ] %>% group_by(year, park_name.x)
+
+split_by_year <- plot_data %>% split(plot_data$year)
+
+park_names_over_the_years <- split_by_year$`1979`$park_name.x
+for (i in split_by_year) {
+  park_names_over_the_years <- intersect(park_names_over_the_years, i$park_name.x)
+}
+
+plot_data <- plot_data %>% filter(park_name.x %in% park_names_over_the_years)
+plot_data$year <- as.integer(plot_data$year)
+plot_data$visitors <- scale(plot_data$visitors)
+plot_data <- subset(plot_data, select = -c(park_name.y))
+colnames(plot_data)[colnames(plot_data)=="park_name.x"] <- "park_name"
+```
+
+## Building plot for park visits through the years on the US map
+
+```{r us-park-visits-through-the-years, message=F}
+library(maps)
+us_states <- map_data("usa")
+
+ditch_the_axes <- theme(
+  axis.text = element_blank(),
+  axis.line = element_blank(),
+  axis.ticks = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank(),
+  axis.title = element_blank()
+  )
+
+g <- ggplot(data = us_states) + 
+  geom_polygon(aes(x = long, y = lat, group = group), fill=NA, color= 'black') + 
+  coord_fixed(1.3) +
+  geom_point(data = plot_data, aes(x = long, y = lat, color = visitors, size = visitors)) +
+  guides(size=FALSE) +
+  scale_colour_gradient(low = "blue", high="red") +
+  ditch_the_axes
+
+g + transition_time(year) +
+  labs(title = "Year: {frame_time}, Park visits, scaled")
+g
+
+anim_save("images/park_visits_by_year.gif")
+```
 
