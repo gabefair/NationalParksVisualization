@@ -31,6 +31,7 @@ library(rvest)
 library(fuzzyjoin)
 library(jkmisc)
 library(ragg)
+library(plotly)
 ```
 
 ## Code to clean and tidy the original data
@@ -461,13 +462,15 @@ park_fees <- read_html(fees_page) %>%
          park_name = str_replace(park_name, "Hawai'i", "Hawaii"))
 ```
 
+### Read in updated data for annual summary for national parks
+
 ```{r read-updated-data, message=F, warning=F}
-#udpated data
 summary_report <- read_csv(here("data/annual_summary_report.csv")) %>% clean_names()
 ```
 
-```{r estimated-national-park-revenue-from-fees-for-2018}
+## Plot estimated national park revenue from fees for 2018
 
+```{r estimated-national-park-revenue-from-fees-for-2018}
 park_revenue_data <- summary_report %>% 
   filter(year == 2018) %>% 
   mutate(visitors = recreation_visitors + non_recreation_visitors) %>% 
@@ -501,13 +504,9 @@ plot <- ggplot(park_revenue_data, aes(x = fct_reorder(park_name, revenue), y = r
 
 ggsave(here("images", "tw_38plot.png"), plot, width = 10, height = 8, device = agg_png())
 ```
-```{r adding-locations-to-national-parks}
-# park_locations <- park_locations %>% clean_names()
-# colnames(park_locations)[colnames(park_locations)=="place_name"] <- "park_name"
-# 
-# plot_data <- park_revenue_data %>% 
-#   regex_join(park_locations, ., ignore_case = TRUE)
-```
+
+## Getting location from park names via ggmap
+Using the park name, or any location name, and the Geocoding API from Google, we got the longitude and latitude for each parks locations.
 
 ```{r getting-location-from-park-names-via-ggmap, message=F}
 # library(ggmap)
@@ -516,9 +515,10 @@ ggsave(here("images", "tw_38plot.png"), plot, width = 10, height = 8, device = a
 # write_csv(locations_df, 'data/park_locations_from_google_api.csv')
 ```
 
-```{r}
+## Getting data for geocoded plot
+
+```{r adding-location-data-for-plot, message=F}
 trial <- summary_report %>% 
-  filter(year == 2018) %>% 
   mutate(visitors = recreation_visitors + non_recreation_visitors) %>% 
   select(year, park_name, visitors)
 
@@ -527,18 +527,49 @@ colnames(park_locations)[colnames(park_locations)=="lon"] <- "long"
 
 plot_data <- trial %>% 
   regex_left_join(park_locations, ., ignore_case = TRUE)
+
+plot_data <- plot_data %>% filter(long > -128, lat < 51, lat > 24)
+plot_data <- plot_data[complete.cases(plot_data), ] %>% group_by(year, park_name.x)
+
+split_by_year <- plot_data %>% split(plot_data$year)
+
+park_names_over_the_years <- split_by_year$`1979`$park_name.x
+for (i in split_by_year) {
+  park_names_over_the_years <- intersect(park_names_over_the_years, i$park_name.x)
+}
+
+plot_data <- plot_data %>% filter(park_name.x %in% park_names_over_the_years)
+plot_data$year <- as.integer(plot_data$year)
+plot_data$visitors <- scale(plot_data$visitors)
 ```
-```{r}
+
+## Building plot for park visits through the years on the US map
+
+```{r us-park-visits-through-the-years, message=F}
 library(maps)
 us_states <- map_data("usa")
 
-plot_data <- plot_data %>% filter(long > -128, lat < 51, lat > 24)
+ditch_the_axes <- theme(
+  axis.text = element_blank(),
+  axis.line = element_blank(),
+  axis.ticks = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank(),
+  axis.title = element_blank()
+  )
 
-ggplot(data = us_states) + 
+g <- ggplot(data = us_states) + 
   geom_polygon(aes(x = long, y = lat, group = group), fill=NA, color= 'black') + 
   coord_fixed(1.3) +
   geom_point(data = plot_data, aes(x = long, y = lat, color = visitors, size = visitors)) +
   guides(size=FALSE) +
-  scale_colour_gradient(low = "blue", high="red")
+  scale_colour_gradient(low = "blue", high="red") +
+  ditch_the_axes
+
+g + transition_time(year) +
+  labs(title = "Year: {frame_time}, Park visits, scaled")
+g
+
+anim_save("images/park_visits_by_year.gif")
 ```
 
