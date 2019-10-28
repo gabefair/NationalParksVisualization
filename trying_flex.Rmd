@@ -55,7 +55,7 @@ Improvments seen below are discussed here: https://evancanfield.netlify.com/post
 
 ### Park change year over year
 
-```{r}
+```{r include=F}
 pv_ch <- park_visits %>% 
   distinct(year, unit_name, unit_type, visitors) %>% 
   filter(unit_type == "National Park" & year != "Total") %>%
@@ -101,7 +101,7 @@ pv_ch %>%
 
 ### Park visits over time
 
-```{r}
+```{r include=F}
 park_visits <- park_visits %>%
   mutate(
     parkname =
@@ -223,3 +223,43 @@ animate(animation, width = 1000, height = 1000, end_pause = 30)
 anim_save('images/tidytuesday_201938_national_park_visits.gif')
 ```
 
+*** 
+
+### Park visits over time
+
+```{r visits-gabe}
+knitr::include_graphics("images/national-parks20191028_154846.png")
+```
+
+*** 
+
+### Park visits over time
+
+```{r visits-gabriel}
+knitr::include_graphics("images/national-parks20191028_154853.png")
+```
+
+
+*** 
+
+### Park visits over time
+
+```{r visits-123}
+knitr::include_graphics("images/national-parks20191028_154901.png")
+```
+
+*** 
+
+### Park visits over time
+
+```{r visits-3456}
+knitr::include_graphics("images/park_visits_by_year.gif")
+```
+
+*** 
+
+### Park visits over time
+
+```{r visits-a31111}
+knitr::include_graphics("images/tw_38plot.png")
+```
