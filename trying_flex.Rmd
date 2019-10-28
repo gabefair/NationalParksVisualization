@@ -1,5 +1,5 @@
 ---
-title: "Khyati and Gabe"
+title: "Exploring our National Parks"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
