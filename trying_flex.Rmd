@@ -55,7 +55,7 @@ Improvments seen below are discussed here: https://evancanfield.netlify.com/post
 
 ### Park change year over year
 
-```{r include=F}
+```{r include=T}
 pv_ch <- park_visits %>% 
   distinct(year, unit_name, unit_type, visitors) %>% 
   filter(unit_type == "National Park" & year != "Total") %>%
@@ -100,8 +100,10 @@ pv_ch %>%
 *** 
 
 ### Park visits over time
+Source: https://github.com/spren9er/tidytuesday/blob/master/tidytuesday_201938_national_park_visits.r
+Improvments seen below are discussed here: https://evancanfield.netlify.com/posts/2019-09-16-national-parks-tidytuesday/tidy-tuesday-38/
 
-```{r include=F}
+```{r include=T}
 park_visits <- park_visits %>%
   mutate(
     parkname =
@@ -225,16 +227,16 @@ anim_save('images/tidytuesday_201938_national_park_visits.gif')
 
 *** 
 
-### Park visits over time
-
-```{r visits-gabe}
+### Park yearly visits as a line chart
+Source: https://github.com/gkaramanis/tidytuesday/blob/master/week-38/national-parks-lines.R
+```{r visits-by-kara}
 knitr::include_graphics("images/national-parks20191028_154846.png")
 ```
 
 *** 
 
-### Park visits over time
-
+### Park visits as a percent
+Source: https://github.com/gkaramanis/tidytuesday/blob/master/week-38/national-parks-lines.R
 ```{r visits-gabriel}
 knitr::include_graphics("images/national-parks20191028_154853.png")
 ```
@@ -242,15 +244,15 @@ knitr::include_graphics("images/national-parks20191028_154853.png")
 
 *** 
 
-### Park visits over time
-
+### Park visits as a percent Redux
+Source: https://github.com/gkaramanis/tidytuesday/blob/master/week-38/national-parks-lines.R
 ```{r visits-123}
 knitr::include_graphics("images/national-parks20191028_154901.png")
 ```
 
 *** 
 
-### Park visits over time
+### Park visits with GIS and animated
 
 ```{r visits-3456}
 knitr::include_graphics("images/park_visits_by_year.gif")
@@ -258,7 +260,7 @@ knitr::include_graphics("images/park_visits_by_year.gif")
 
 *** 
 
-### Park visits over time
+### 2018 Park Fee Revenue
 
 ```{r visits-a31111}
 knitr::include_graphics("images/tw_38plot.png")
