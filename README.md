@@ -1,6 +1,6 @@
 # National Parks Tidy Tuesdays Design Contest
 
-##Class Project
+## Class Project
 We decided to explore the #TidyTuesdays R community for our class project. We saw the dataset on National Parks and we decided this would be a good visualization we could expirment with as we try to improve and replicate visuals submitted by others.
 
 ### Improvements
