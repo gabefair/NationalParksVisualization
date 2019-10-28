@@ -28,10 +28,13 @@ library(ragg)
 
 
 ```{r import-dataset, message=FALSE}
-park_visits <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/national_parks.csv")
-state_pop <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/state_pop.csv")
-gas_price <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/gas_price.csv")
-park_locations <- read_csv("data/NationalParksLatLong.csv")
+#park_visits <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/national_parks.csv")
+park_visits <- read_csv("data/national_parks.csv")
+#state_pop <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/state_pop.csv")
+state_pop <- read_csv("data/state_pop.csv")
+#gas_price <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/gas_price.csv")
+#gas_price <- readr::read_csv("data/gas_price.csv")
+park_locations <- read.csv("data/NationalParksLatLong.csv")
 ```
 
 ### Park Locations
@@ -39,8 +42,7 @@ park_locations <- read_csv("data/NationalParksLatLong.csv")
 
 Plotting the locations of the various national parks
 
-```{r most-popular-national-park-locations}
-
+```{r most-popular-national-park-locations-GIS}
 library(sp)
 library(leaflet)
 coordinates(park_locations) <- ~Longitude+Latitude
