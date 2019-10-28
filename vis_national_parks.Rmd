@@ -541,6 +541,8 @@ for (i in split_by_year) {
 plot_data <- plot_data %>% filter(park_name.x %in% park_names_over_the_years)
 plot_data$year <- as.integer(plot_data$year)
 plot_data$visitors <- scale(plot_data$visitors)
+plot_data <- subset(plot_data, select = -c(park_name.y))
+colnames(plot_data)[colnames(plot_data)=="park_name.x"] <- "park_name"
 ```
 
 ## Building plot for park visits through the years on the US map
