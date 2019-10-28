@@ -7,8 +7,9 @@ We decided to explore the #TidyTuesdays R community for our class project. We sa
 
 1) What are good design aspects?
 -- Having a graphic that is displayed in high enough quality to discinquish all parts of a line or scatterplot is a sometimes overlooked point. Data Visualizations today are included on websites and presentaitons that will be seen on projectors, mobile devices, and even on tablets that change the color tempature of the monitor during different times of the day and night. So it is important for data visualizations to be easily legible for all these devices and use cases.
--- Another good design is to have a concern for the color blind and the color disadvantaged when choosing colors for a plot. GGplot will naturally choose distinct colors while maintaining the lightness of the color pallet the same. This is not the best design considering the assisability of the audience. The Okabe Ito pallet is a good example of a color pallet that is accessable
---
+-- Another good design is to have a concern for the color blind and the color disadvantaged when choosing colors for a plot. GGplot will naturally choose distinct colors while maintaining the lightness of the color pallet the same. This is not the best design considering the assisability of the audience. The Okabe Ito pallet is a good example of a color pallet that is accessable as cited in Wilke Ch. 19.
+-- What questions did we have with somebody's code.
+We noticed that some TidyTuesdays submittors used personal (e.g. jkmisc) libraries that did not work well with the version of R avaliable on the R studio cloud. But after resolving this issue we were able to recreate the graphic submission.
 
 
 ### Improvements
