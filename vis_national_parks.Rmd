@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 America has 61 national park_visits. They have grown in size and popularity over the years.
 
-```{r loading-libraries}
+```{r loading-libraries, message=F}
 library(devtools)
 library(tidyverse)
 library(gganimate)
@@ -37,10 +37,6 @@ library(ragg)
 This is a demostration of using the `janitor` package
 
 ```{r cleaning-data, include=F}
-
-library(tidyverse)
-library(rvest)
-
 df_raw <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-17/All%20National%20Parks%20Visitation%201904-2016.csv")
 
 
@@ -465,14 +461,14 @@ park_fees <- read_html(fees_page) %>%
          park_name = str_replace(park_name, "Hawai'i", "Hawaii"))
 ```
 
-```{r read-updated-data}
+```{r read-updated-data, message=F, warning=F}
 #udpated data
 summary_report <- read_csv(here("data/annual_summary_report.csv")) %>% clean_names()
 ```
 
 ```{r estimated-national-park-revenue-from-fees-for-2018}
 
-plot_data <- summary_report %>% 
+park_revenue_data <- summary_report %>% 
   filter(year == 2018) %>% 
   mutate(visitors = recreation_visitors + non_recreation_visitors) %>% 
   select(year, park_name, visitors) %>% 
@@ -487,7 +483,7 @@ plot_data <- summary_report %>%
   select(-park_name.y)
 
 
-plot <- ggplot(plot_data, aes(x = fct_reorder(park_name, revenue), y = revenue)) +
+plot <- ggplot(park_revenue_data, aes(x = fct_reorder(park_name, revenue), y = revenue)) +
   geom_col(fill = "#5e81ac", size = 0.1) +
   coord_flip() +
   scale_y_continuous(labels = scales::dollar, expand = c(0.01,0)) +
@@ -505,5 +501,44 @@ plot <- ggplot(plot_data, aes(x = fct_reorder(park_name, revenue), y = revenue))
 
 ggsave(here("images", "tw_38plot.png"), plot, width = 10, height = 8, device = agg_png())
 ```
+```{r adding-locations-to-national-parks}
+# park_locations <- park_locations %>% clean_names()
+# colnames(park_locations)[colnames(park_locations)=="place_name"] <- "park_name"
+# 
+# plot_data <- park_revenue_data %>% 
+#   regex_join(park_locations, ., ignore_case = TRUE)
+```
 
+```{r getting-location-from-park-names-via-ggmap, message=F}
+# library(ggmap)
+# unique_locations <- summary_report %>% distinct(park_name)
+# locations_df <- mutate_geocode(unique_locations, park_name)
+# write_csv(locations_df, 'data/park_locations_from_google_api.csv')
+```
+
+```{r}
+trial <- summary_report %>% 
+  filter(year == 2018) %>% 
+  mutate(visitors = recreation_visitors + non_recreation_visitors) %>% 
+  select(year, park_name, visitors)
+
+park_locations <- read_csv('data/park_locations_from_google_api.csv')
+colnames(park_locations)[colnames(park_locations)=="lon"] <- "long"
+
+plot_data <- trial %>% 
+  regex_left_join(park_locations, ., ignore_case = TRUE)
+```
+```{r}
+library(maps)
+us_states <- map_data("usa")
+
+plot_data <- plot_data %>% filter(long > -128, lat < 51, lat > 24)
+
+ggplot(data = us_states) + 
+  geom_polygon(aes(x = long, y = lat, group = group), fill=NA, color= 'black') + 
+  coord_fixed(1.3) +
+  geom_point(data = plot_data, aes(x = long, y = lat, color = visitors, size = visitors)) +
+  guides(size=FALSE) +
+  scale_colour_gradient(low = "blue", high="red")
+```
 
