@@ -1,8 +1,11 @@
 # National Parks [#TidyTuesday](https://github.com/rfordatascience/tidytuesday) Design Contest
 
 ## Exploring our National Parks
-We decided to explore the National Parks #TidyTuesday R dataset for our DSBA 5122 design contest project. The dataset had been visualized before, providing us with a starting point, and lots to learn. Some visualizations we looked at were:
+We decided to explore the [National Parks #TidyTuesday](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-09-17) R dataset for our DSBA 5122 design contest project. The dataset had been visualized before, providing us with a starting point, and lots to learn. Some visualizations we looked at were:
 1. https://fivethirtyeight.com/features/the-national-parks-have-never-been-more-popular/
+2. https://twitter.com/jakekaupp/status/1174139740515438593
+3. https://evancanfield.netlify.com/posts/2019-09-16-national-parks-tidytuesday/tidy-tuesday-38/
+4. https://github.com/gkaramanis/tidytuesday/tree/master/week-38
 
 ## Critique
 #### What are good design aspects?
