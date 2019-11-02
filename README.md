@@ -32,6 +32,7 @@ We noticed that some TidyTuesdays submittors used personal (e.g. [jkmisc](https:
 
 #### Interactive elements
 1. Use timeline data for interactive visualizations over time.
+2. The use of leafet to plot the locations of the National Parks on a map of the USA
 
 #### Dashboard for scenario
 View our flex dashboard for this design contest project - 
