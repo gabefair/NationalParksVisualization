@@ -26,6 +26,9 @@ We noticed that some TidyTuesdays submittors used personal (e.g. [jkmisc](https:
 
 #### Tasks and Data Analysis
 1. Use geographical nature of data by adding geolocations using [Google's geocoding API](https://developers.google.com/maps/documentation/geocoding/start) with [R's ggmap package](https://cran.r-project.org/web/packages/ggmap/index.html).
+2. Order the National parks based on Popularity
+3. Characterize the distribution of visitors to the parks
+
 
 #### Interactive elements
 1. Use timeline data for interactive visualizations over time.
