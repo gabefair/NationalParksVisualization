@@ -31,7 +31,7 @@ We noticed that some TidyTuesdays submittors used personal (e.g. [jkmisc](https:
 View our flex dashboard for this design contest project - 
 
 #### Presentation for design contest
-View our presentation for the design contest - http://bit.ly/dsba5122designcontest
+View our presentation for the design contest - http://bit.ly/designcontestdsba5122
 
 # Acknowledgements
 We would like to thank the people at [`fivethirtyeight`](https://fivethirtyeight.com/features/the-national-parks-have-never-been-more-popular/) for their visualizations which gave us a great starting point for this project. We would like to thank [Torsten Sprenger](https://github.com/spren9er) for his [visualization of the park visits](https://github.com/spren9er/tidytuesday/blob/master/tidytuesday_201938_national_park_visits.r).
