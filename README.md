@@ -42,8 +42,3 @@ We would like to thank the people at [`fivethirtyeight`](https://fivethirtyeight
 We would like to thank [Ryan Wesslen](https://wesslen.github.io) and his amazingly comprehensive [DSBA 5122 course at UNCC](https://dsba5122.com) for all the concepts and ideologies we have learnt and imbued into this project.
 
 We would like to thank the [#TidyTuesday](https://github.com/rfordatascience/tidytuesday) and [R4DS](https://r4ds.had.co.nz) community for making varied and interesting datasets available for researchers to practice and work on, and grow together as a community.
-
-######### Improvements
-1) Add total hours charts
-
->Visits — defined as “a person in a park on a day” — are just one way to measure park usage. Total hours spent tell a different story. “Visitor hours are equally important when looking at impacts on facilities, roads, staffing, etc.,” Ziesler said. Total hours include overnight stays and better reflect intensity of use. By this metric, Grand Canyon and Yellowstone national parks had the highest recreational hours in 2015. Overall, total recreational hours are up 37 percent since 1979, while nonrecreational hours are about flat.
