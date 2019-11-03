@@ -35,7 +35,7 @@ We noticed that some TidyTuesdays submittors used personal (e.g. [jkmisc](https:
 2. The use of leafet to plot the locations of the National Parks on a map of the USA
 
 #### Dashboard for scenario
-View our flex dashboard for this design contest project - 
+View our flex dashboard for this design contest project - https://gabefair.github.io/NationalParksVisualization/index.html
 
 #### Presentation for design contest
 View our presentation for the design contest - http://bit.ly/designcontestdsba5122
